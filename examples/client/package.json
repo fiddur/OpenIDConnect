@@ -1,0 +1,18 @@
+{
+  "name": "openid-connect-client-example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node example-client.js"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "errorhandler": "*",
+    "express": "~4.0",
+    "extend": "*",
+    "method-override": "*",
+    "morgan": "*",
+    "passport": "^0.2.1",
+    "passport-openidconnect": "0.0.1"
+  }
+}

@@ -4,6 +4,7 @@
 
 var bodyParser = require('body-parser');
 var express = require('express');
+var expressSession = require('express-session');
 var http = require('http');
 var logger = require('morgan');
 var passport = require('passport');
@@ -11,26 +12,13 @@ var openid = require('passport-openidconnect');
 
 var app = module.exports = express();
 
-/*
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (!user.verifyPassword(password)) { return done(null, false); }
-      return done(null, user);
-    });
-  }
-));
-//*/
-
 passport.use(new openid.Strategy({
   authorizationURL: 'http://localhost:3001/user/authorize',
   tokenURL: 'http://localhost:3001/user/token',
-  clientID: '73e7ea98700270fd98f1ed168838e2ec',
-  clientSecret: 'ab80faca8ed14b4d20d7c8e6fabee5de',
+  clientID: '7a956c6a0e62f4b961d73b88de501fee',
+  clientSecret: '4d74027532ceba778aa280d5f620f152',
   callbackURL: 'http://localhost:3000/users',
-  userInfoURL: 'http://localhost:3000/users/3'
+  userInfoURL: 'http://localhost:3000/users/local%40andersriutta.com'
 },
 function(accessToken, refreshToken, profile, done) {
   console.log('accessToken');
@@ -40,70 +28,28 @@ function(accessToken, refreshToken, profile, done) {
   console.log('profile');
   console.log(profile);
   console.log('done');
-  console.log(done.toString());
-  var loggedinUser = {
+  console.log(done);
+  var user = {
     oauthID: profile.id,
     name: profile.displayName,
     created: Date.now()
   };
-  done(null, loggedinUser, {boss: 'fleek'});
-  /*
-  User.findOne({oauthID: profile.id}, function(err, user) {
-    if(err) { console.log(err); }
-    if (!err && user != null) {
-      done(null, user);
-    } else {
-      var user = new User({
-        oauthID: profile.id,
-        name: profile.displayName,
-        created: Date.now()
-      });
-      user.save(function(err) {
-        if(err) {
-          console.log(err);
-        } else {
-          console.log("saving user ...");
-          done(null, user);
-        };
-      });
-    };
-  });
-  //*/
-}
-/*
-function(err, result) {
-  console.log(err);
-  console.log(result);
-  console.log('Hello world');
-  return false;
-}
-//*/
-));
+  done(null, user);
+}));
 
 app.set('port', process.env.PORT || 3000);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-//app.use(express.session({secret: 'keyboard cat'}));
-app.use(passport.initialize());
+app.use(expressSession({secret: 'keyboard cat'}));
 
-/*
-app.configure(function() {
-  app.use(express.static(__dirname + '/../../public'));
-  app.use(express.cookieParser());
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: false}));
-  app.use(express.session({secret: 'keyboard cat'}));
-  app.use(passport.initialize());
-  app.use(passport.session());
-});
-//*/
+app.use(passport.initialize());
 
 // Ad-hoc example resource method
 
 app.resource = function(path, obj) {
   this.get(path,
-    passport.authenticate('openidconnect', { session: false }),  // THIS WORKS!!
+    passport.authenticate('openidconnect', {}),
     obj.index);
   this.get(path + '/:a..:b.:format?', function(req, res){
     var a = parseInt(req.params.a, 10);
@@ -122,25 +68,12 @@ app.resource = function(path, obj) {
 // Fake records
 
 var users = [
-  {
-    email: 'tj@example.org',
-    name: 'tj'
-  }, {
-    email: 'ciaran@example.org',
-    name: 'ciaran'
-  }, {
-    email: 'aaron@example.org',
-    name: 'aaron'
-  }, {
-    email: 'guillermo@example.org',
-    name: 'guillermo'
-  }, {
-    email: 'simon@example.org',
-    name: 'simon'
-  }, {
-    email: 'tobi@example.org',
-    name: 'tobi'
-  }
+    { name: 'tj' }
+  , { name: 'ciaran' }
+  , { name: 'aaron' }
+  , { name: 'guillermo' }
+  , { name: 'simon' }
+  , { name: 'tobi' }
 ];
 
 // Fake controller.
@@ -150,9 +83,7 @@ var User = {
     res.send(users);
   },
   show: function(req, res){
-    var user = users[req.params.id] || { error: 'Cannot find user' };
-    user.sub = req.params.id;
-    res.send(user);
+    res.send(users[req.params.id] || { error: 'Cannot find user' });
   },
   destroy: function(req, res, id){
     var destroyed = id in users;
@@ -186,7 +117,7 @@ app.resource('/users',
     User);
 
 app.get('/',
-  passport.authenticate('openidconnect', { session: false }),  // THIS WORKS!!
+  passport.authenticate('openidconnect', {}),
   function(req, res){
     res.send([
         '<h1>Examples:</h1> <ul>'
@@ -211,3 +142,4 @@ if (!module.parent) {
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+

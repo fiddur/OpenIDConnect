@@ -9,8 +9,9 @@ var crypto = require('crypto'),
     http = require('http'),
     path = require('path'),
     querystring = require('querystring'),
-    rs = require('connect-redis')(expressSession),
+    Redis = require('connect-redis')(expressSession),
     extend = require('extend'),
+
     test = {
         status: 'new'
     },
@@ -29,14 +30,13 @@ var options = {
     foo: 'Access to foo special resource',
     bar: 'Access to bar special resource'
   },
-//when this line is enabled, user email appears in tokens sub field. By default, id is used as sub.
-  models:{user:{attributes:{sub:function(){return this.email;}}}},
+  //when this line is enabled, user email appears in tokens sub field. By default, id is used as sub.
+  models:{user:{attributes:{sub:function() {return this.email;}}}},
   app: app
 };
-var oidc = require('../index').oidc(options);
+var oidc = require('../../index').oidc(options);
 
-
-// all environments
+//all environments
 app.set('port', process.env.PORT || 3001);
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -45,8 +45,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(methodOverride());
 app.use(cookieParser('Some Secret!!!'));
-app.use(expressSession({store: new rs({host: '127.0.0.1', port: 6379}), secret: 'Some Secret!!!'}));
-// app.use(app.router);
+app.use(expressSession({store: new Redis({host: '127.0.0.1', port: 6379}), secret: 'Some Secret!!!'}));
+//app.use(app.router);
 
 //redirect to login
 app.get('/', function(req, res) {
@@ -285,6 +285,7 @@ app.get('/client', oidc.use('client'), function(req, res, next){
      res.send(head+body.join(''));
   });
 });
+
 
 app.get('/client/:id', oidc.use('client'), function(req, res, next){
   req.model.client.findOne({user: req.session.user, id: req.params.id}, function(err, client){

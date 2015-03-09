@@ -35,7 +35,6 @@ var options = {
 };
 var oidc = require('../index').oidc(options);
 
-
 // all environments
 app.set('port', process.env.PORT || 3001);
 app.use(logger('dev'));

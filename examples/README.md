@@ -24,24 +24,14 @@ npm install
 node openid-connect-example.js
 ```
 
-5. Create user at http://localhost:3001/user/create
-
-http://localhost:3001/client/register
-  210
-  http://localhost:3001/user
-  Client Key 0798ec5cb300cd5097d2595319b054fb
-  Client Secret 805d61ab96708fa4b45fba75bbbfcea6
-
-http://localhost:3001/test/clear
-  scope: foo
-  Follow prompts
-    Accept
-    Next, next, next
-    See page that is restricted by foo scope: http://localhost:3001/user/foo?access_token=4ace62feb6c768b27f6524b805276858
-
-http://localhost:3001/
-
-6. Test an auth flow at http://localhost:3001/test
-
-http://localhost:3001/my/login
-http://localhost:3001/logout
+5. Create user: http://localhost:3001/user/create
+6. Register a client: http://localhost:3001/client/register
+7. Navigate to http://localhost:3001/test/clear
+  * Select scope: foo
+  * Follow prompts
+    - Accept
+    - Next, next, next
+    - See page that is restricted by foo scope
+8. Test an auth flow at http://localhost:3001/test
+9. Logout: http://localhost:3001/logout
+10. Login again: http://localhost:3001/my/login

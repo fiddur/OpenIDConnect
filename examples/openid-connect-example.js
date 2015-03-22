@@ -39,11 +39,7 @@ var oidc = require('../index').oidc(options);
 // all environments
 app.set('port', process.env.PORT || 3001);
 app.use(logger('dev'));
-//app.use(bodyParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(bodyParser());
 app.use(methodOverride());
 app.use(cookieParser('Some Secret!!!'));
 app.use(expressSession({store: new rs({host: '127.0.0.1', port: 6379}), secret: 'Some Secret!!!'}));

@@ -15,7 +15,6 @@
   "requireSpacesInFunctionExpression": {
     "beforeOpeningCurlyBrace": true
   },
-  "requireSpacesInsideArrayBrackets": "all",
   "requireSpaceBeforeBlockStatements": true,
   "requireSpacesInForStatement": true,
   "disallowKeywords": [
@@ -23,7 +22,6 @@
   ],
   "requireLineFeedAtFileEnd": true,
   "validateLineBreaks": "LF",
-  "validateIndentation": 4,
   "requireSpaceAfterPrefixUnaryOperators": [
     "++",
     "--"
@@ -55,12 +53,13 @@
     "<="
   ],
   "disallowSpaceBeforeBinaryOperators": [
-    ",",
     "+",
     "/",
     "*",
     "<"
   ],
+  "disallowPaddingNewlinesInBlocks": true,
+  "validateIndentation": 4,
   "disallowSpaceAfterKeywords": [
     "if",
     "for",
@@ -76,6 +75,8 @@
     "*",
     "<"
   ],
+  "disallowSpacesInsideObjectBrackets": "all",
+  "disallowSpacesInsideArrayBrackets": "all",
   "disallowSpaceBeforePostfixUnaryOperators": [
     "++"
   ]

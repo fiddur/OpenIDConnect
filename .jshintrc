@@ -1,8 +1,8 @@
 {
   "node": true,
   "bitwise": true,
-  "camelcase": true,
-  "curly": true,
+  "camelcase": false,
+  "curly": false,
   "forin": true,
   "immed": true,
   "latedef": true,

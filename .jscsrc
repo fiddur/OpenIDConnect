@@ -35,7 +35,6 @@
     "=",
     "==",
     "===",
-    "!=",
     "!==",
     ">",
     ">=",
@@ -46,7 +45,6 @@
     "=",
     "==",
     "===",
-    "!=",
     "!==",
     ">",
     ">=",
@@ -54,16 +52,23 @@
   ],
   "disallowSpaceBeforeBinaryOperators": [
     "+",
+    "+",
     "/",
     "*",
+    "!=",
+    "<",
     "<"
   ],
   "disallowPaddingNewlinesInBlocks": true,
-  "validateIndentation": 4,
+  "validateIndentation": 2,
   "disallowSpaceAfterKeywords": [
     "if",
+    "if",
+    "for",
     "for",
     "switch",
+    "switch",
+    "catch",
     "catch"
   ],
   "disallowSpacesInConditionalExpression": {
@@ -71,13 +76,17 @@
   },
   "disallowSpaceAfterBinaryOperators": [
     "+",
+    "+",
     "/",
     "*",
+    "!=",
+    "<",
     "<"
   ],
   "disallowSpacesInsideObjectBrackets": "all",
   "disallowSpacesInsideArrayBrackets": "all",
   "disallowSpaceBeforePostfixUnaryOperators": [
+    "++",
     "++"
   ]
 }

@@ -37,4 +37,4 @@ You must have [Node.js](http://nodejs.org/) and [Redis](http://redis.io/download
     - Get Resource
     - You should see page that is restricted by ```foo``` scope
 8. Logout: http://localhost:3001/logout?access_token=YOUR_ACCESS_TOKEN
-12. Logout; then navigate to http://localhost:3001/user/foo?access_token=YOUR_ACCESS_TOKEN
+9. Navigate to http://localhost:3001/user/foo?access_token=YOUR_ACCESS_TOKEN

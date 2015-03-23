@@ -142,7 +142,7 @@ var defaults = {
       connection: 'def',
       policies: 'loggedIn',
       attributes: {
-        client: {model: 'client',   required: true},
+        client: {model: 'client', required: true},
         scope: {type: 'array', required: true},
         user: {model: 'user', required: true},
         sub: {type: 'string', required: true},

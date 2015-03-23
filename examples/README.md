@@ -5,24 +5,24 @@ You must have [Node.js](http://nodejs.org/) and [Redis](http://redis.io/download
 1. Fork this repository
 2. Clone it, using your username
 
-```
-git clone git@github.com:<YOUR_USERNAME>/OpenIDConnect.git
-cd OpenIDConnect
-```
+ ```
+ git clone git@github.com:<YOUR_USERNAME>/OpenIDConnect.git
+ cd OpenIDConnect
+ ```
 
 3. Install Node.js dependencies
 
-```
-npm install
-cd examples
-npm install
-```
+ ```
+ npm install
+ cd examples
+ npm install
+ ```
 
 4. Start server
 
-```
-node openid-connect-example.js
-```
+ ```
+ node openid-connect-example.js
+ ```
 
 5. Create user: http://localhost:3001/user/create
 6. Register a client: http://localhost:3001/client/register
@@ -36,5 +36,5 @@ node openid-connect-example.js
     - Get Token
     - Get Resource
     - You should see page that is restricted by ```foo``` scope
-8. Logout: http://localhost:3001/logout?access_token=<YOUR_ACCESS_TOKEN>
-12. Logout; then navigate to http://localhost:3001/user/foo?access_token=<YOUR_ACCESS_TOKEN>
+8. Logout: http://localhost:3001/logout?access_token=YOUR_ACCESS_TOKEN
+9. Navigate to http://localhost:3001/user/foo?access_token=YOUR_ACCESS_TOKEN

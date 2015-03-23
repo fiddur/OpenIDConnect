@@ -183,8 +183,8 @@ var defaults = {
         // TODO when this line is required, it results in
         // an error being thrown when clicking the "Get
         // Token" button on the "Test Auth Flows" page.
-        auth: {model: 'auth', required: true},
-        //auth: {model: 'auth'},
+        //auth: {model: 'auth', required: true},
+        auth: {model: 'auth'},
         status: {type: 'string', required: true}
       }
     }

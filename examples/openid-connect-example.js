@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -29,7 +28,7 @@ var options = {
     foo: 'Access to foo special resource',
     bar: 'Access to bar special resource'
   },
-//when this line is enabled, user email appears in tokens sub field. By default, id is used as sub.
+  //when this line is enabled, user email appears in tokens sub field. By default, id is used as sub.
   models:{user:{attributes:{sub:function() {return this.email;}}}},
   app: app
 };
@@ -38,10 +37,20 @@ var oidc = require('../index').oidc(options);
 // all environments
 app.set('port', process.env.PORT || 3001);
 app.use(logger('dev'));
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(methodOverride());
 app.use(cookieParser('Some Secret!!!'));
-app.use(expressSession({store: new rs({host: '127.0.0.1', port: 6379}), secret: 'Some Secret!!!'}));
+//*
+app.use(expressSession({
+  store: new rs({host: '127.0.0.1', port: 6379}),
+  secret: 'Some Secret!!!',
+  saveUninitialized: true,
+  resave: true
+}));
+//*/
 // app.use(app.router);
 
 //redirect to login
@@ -420,12 +429,14 @@ app.get('/test', oidc.use({policies: {loggedIn: false}, models: 'client'}), func
       break;
     case '3':
       test.status = '4';
+
       test.code = req.query.code;
       var query = {
         grant_type: 'authorization_code',
         code: test.code,
         redirect_uri: test.redirect_uri
       };
+
       var post_data = querystring.stringify(query);
       var post_options = {
         port: app.get('port'),
@@ -448,7 +459,6 @@ app.get('/test', oidc.use({policies: {loggedIn: false}, models: 'client'}), func
           console.log('Response: '+chunk);
         });
         pres.on('end', function() {
-          console.log(data);
           try {
             data = JSON.parse(data);
             html += 'Got: <pre>'+JSON.stringify(data)+'</pre>';

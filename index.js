@@ -118,8 +118,7 @@ var defaults = {
           sha256.update(values.name);
           sha256.update(Math.random()+'');
           values.key = sha256.digest('hex');
-        }
-        if(!values.secret) {
+        } else if(!values.secret) {
           sha256.update(values.key);
           sha256.update(values.name);
           sha256.update(Math.random()+'');
@@ -181,7 +180,11 @@ var defaults = {
       attributes: {
         token: {type: 'string', required: true},
         scope: {type: 'array', required: true},
-        auth: {model: 'auth', required: true},
+        // TODO when this line is required, it results in
+        // an error being thrown when clicking the "Get
+        // Token" button on the "Test Auth Flows" page.
+        //auth: {model: 'auth', required: true},
+        auth: {model: 'auth'},
         status: {type: 'string', required: true}
       }
     }
@@ -791,35 +794,34 @@ OpenIDConnect.prototype.token = function() {
             case 'authorization_code':
               //Step 3: check if code is valid and not used previously
               req.model.auth.findOne({code: params.code})
-          .populate('accessTokens')
-          .populate('refreshTokens')
-          .populate('client')
-          .exec(function(err, auth) {
-            if(!err && auth) {
-              if(auth.status!='created') {
-                auth.refresh.forEach(function(refresh) {
-                  refresh.destroy();
-                });
-                auth.access.forEach(function(access) {
-                  access.destroy();
-                });
-                auth.destroy();
-                deferred.reject({type: 'error', error: 'invalid_grant', msg: 'Authorization code already used.'});
-              } else {
-                //obj.auth = a;
-                deferred.resolve({auth: auth, scope: auth.scope, client: client, user: auth.user, sub: auth.sub});
-              }
-            } else {
-              deferred.reject({type: 'error', error: 'invalid_grant', msg: 'Authorization code is invalid.'});
-            }
-          });
+              .populate('accessTokens')
+              .populate('refreshTokens')
+              .populate('client')
+              .exec(function(err, auth) {
+                if(!err && auth) {
+                  if(auth.status!='created') {
+                    auth.refresh.forEach(function(refresh) {
+                      refresh.destroy();
+                    });
+                    auth.access.forEach(function(access) {
+                      access.destroy();
+                    });
+                    auth.destroy();
+                    deferred.reject({type: 'error', error: 'invalid_grant', msg: 'Authorization code already used.'});
+                  } else {
+                    //obj.auth = a;
+                    deferred.resolve({auth: auth, scope: auth.scope, client: client, user: auth.user, sub: auth.sub});
+                  }
+                } else {
+                  deferred.reject({type: 'error', error: 'invalid_grant', msg: 'Authorization code is invalid.'});
+                }
+              });
 
-        // linter complains about unreachable break after return without this if
+              // linter complains about unreachable break after return without this if
               if(true) {
-          //Extra checks, required if grant_type is 'authorization_code'
+                //Extra checks, required if grant_type is 'authorization_code'
                 return deferred.promise.then(function(obj) {
                   //Step 4: check if grant_type is valid
-
                   if(obj.auth.responseType!='code') {
                     throw {type: 'error', error: 'unauthorized_client', msg: 'Client cannot use this grant type.'};
                   }

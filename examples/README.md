@@ -26,12 +26,15 @@ node openid-connect-example.js
 
 5. Create user: http://localhost:3001/user/create
 6. Register a client: http://localhost:3001/client/register
-7. Navigate to http://localhost:3001/test/clear
-  * Select scope: foo
+  * Client Key: exampleid
+  * Redirect URI: http://localhost:3001/test
+7. Test an auth flow at http://localhost:3001/test
+  * Client Key: exampleid
+  * Scopes: foo
   * Follow prompts
     - Accept
-    - Next, next, next
-    - See page that is restricted by foo scope
-8. Test an auth flow at http://localhost:3001/test
-9. Logout: http://localhost:3001/logout
-10. Login again: http://localhost:3001/my/login
+    - Get Token
+    - Get Resource
+    - You should see page that is restricted by ```foo``` scope
+8. Logout: http://localhost:3001/logout?access_token=<YOUR_ACCESS_TOKEN>
+12. Logout; then navigate to http://localhost:3001/user/foo?access_token=<YOUR_ACCESS_TOKEN>

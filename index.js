@@ -43,6 +43,10 @@ var defaults = {
       }
     },
   },
+  jwtEncoding: {
+    alg: 'HS512',
+    secret: null,  // This will default to client_secret
+  },
   adapters: {
     redis: sailsRedis
   },
@@ -656,7 +660,10 @@ OpenIDConnect.prototype.auth = function() {
             if(resp.access_token && resp.id_token) {
               var hbuf = crypto.createHmac('sha256', req.session.client_secret).update(resp.access_token).digest();
               resp.id_token.ht_hash = base64url(hbuf.toString('ascii', 0, hbuf.length/2));
-              resp.id_token = jwt.encode(resp.id_token, req.session.client_secret);
+              resp.id_token = jwt.encode(
+                  resp.id_token, self.settings.jwtEncoding.secret || req.session.client_secret,
+                  self.settings.jwtEncoding.alg
+              );
             }
             deferred.resolve({params: params, type: params.response_type!='code'?'f':'q', resp: resp});
           });
@@ -964,7 +971,10 @@ OpenIDConnect.prototype.token = function() {
                 expiresIn: 3600,
                 user: prev.user||null,
                 client: prev.client.id,
-                idToken: jwt.encode(id_token, prev.client.secret),
+                idToken: jwt.encode(
+                  id_token, self.settings.jwtEncoding.secret || prev.client_secret,
+                  self.settings.jwtEncoding.alg
+                ),
                 scope: prev.scope,
                 auth: prev.auth?prev.auth.id:null
               },

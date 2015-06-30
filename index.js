@@ -982,7 +982,7 @@ OpenIDConnect.prototype.token = function() {
                     .populate('accessTokens')
                     .populate('refreshTokens')
                     .exec(function(err, auth) {
-                      if(!auth.access.length && !auth.refresh.length) {
+                      if(err || (!auth.access.length && !auth.refresh.length)) {
                         auth.destroy();
                       }
                     });

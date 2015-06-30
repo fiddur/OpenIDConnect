@@ -150,6 +150,7 @@ var defaults = {
         redirectUri: {type: 'url', required: true},
         responseType: {type: 'string', required: true},
         status: {type: 'string', required: true},
+        nonce:  {type: 'string'},
         accessTokens: {
           collection: 'access',
           via: 'auth'
@@ -576,7 +577,8 @@ OpenIDConnect.prototype.auth = function() {
                     code: token,
                     redirectUri: params.redirect_uri,
                     responseType: params.response_type,
-                    status: 'created'
+                    status: 'created',
+                    nonce: params.nonce,
                   }).exec(function(err, auth) {
                     if(!err && auth) {
                       setTimeout(function() {
@@ -953,7 +955,8 @@ OpenIDConnect.prototype.token = function() {
                 sub: prev.sub||prev.user||null,
                 aud: prev.client.key,
                 exp: d+3600,
-                iat: d
+                iat: d,
+                nonce: prev.auth?prev.auth.nonce:null
               };
               req.model.access.create({
                 token: access,

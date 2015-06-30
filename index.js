@@ -802,10 +802,10 @@ OpenIDConnect.prototype.token = function() {
               .exec(function(err, auth) {
                 if(!err && auth) {
                   if(auth.status!='created') {
-                    auth.refresh.forEach(function(refresh) {
+                    auth.refreshTokens.forEach(function(refresh) {
                       refresh.destroy();
                     });
-                    auth.access.forEach(function(access) {
+                    auth.accessTokens.forEach(function(access) {
                       access.destroy();
                     });
                     auth.destroy();
